@@ -11,6 +11,7 @@
 
 - `cd ytvl-block/`
 - `npm i`
+- `npm run build`
 - You should now have a /build directory inside ytvl-block/.
 - The plugin 'YouTube Video Loader' can now be activated via WordPress admin area.
 - Note: without build, the activation will fail.
