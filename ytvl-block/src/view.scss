@@ -1,0 +1,63 @@
+.ytvl-wrapper-fe {
+    max-width: 400px;
+
+    .ytvl-preview-img-icon {
+        opacity: 0.1;
+        width: 100%;
+        height: 344px;
+    }
+
+    .ytvl-editor-preview-wrapper {
+        margin-top: 12px;
+        max-width: 600px;
+        background: black;
+        position: relative;
+        border-radius: 6px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        cursor: pointer;
+        height: 344px;
+
+        .ytvl-thumb-img {
+            width: 100%;
+            height: 344px;
+            object-fit: cover;
+        }
+    }
+
+    .loader-icon {
+        position: absolute;
+        display: flex;
+
+        svg {
+            fill: red;
+            max-width: 70px;
+        }
+    }
+
+    .ytvl-loading-overlay {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.9);
+        display: grid;
+        place-items: center;
+        z-index: 2;
+    }
+    
+    .ytvl-spinner {
+        width: 40px;
+        height: 40px;
+        border: 4px solid rgba(255, 255, 255, 0.3);
+        border-top-color: #fff;
+        border-radius: 50%;
+        animation: ytvl-spinner 1s linear infinite;
+    }
+    
+    @keyframes ytvl-spinner {
+        to { transform: rotate(360deg); }
+    }
+}
