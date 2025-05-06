@@ -1,5 +1,5 @@
-const previewImg = (
-    <svg className="ytvl-preview-img-icon" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
+const previewImg = ( style ) => (
+    <svg className="ytvl-preview-img-icon" style={style} viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="100%" height="100%">
         <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
         <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" stroke="#CCCCCC" stroke-width="0.528"></g>
         <g id="SVGRepo_iconCarrier">

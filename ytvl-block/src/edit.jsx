@@ -1,13 +1,29 @@
 import { __ } from '@wordpress/i18n';
 import { InspectorControls, MediaPlaceholder, useBlockProps } from '@wordpress/block-editor';
-import { PanelBody, TextControl, ToggleControl, Button } from '@wordpress/components';
+import { PanelBody, TextControl, ToggleControl, Button, SelectControl } from '@wordpress/components';
 import { useState } from '@wordpress/element';
 import { ytIcon, previewImg, getVideoID, getYouTubeThumbnail } from './assets';
 
 
 export default function Edit({ attributes, setAttributes, isSelected }) {
-    const { embedUrl, useCustomPreviewImage, customPreviewImage, ytThumb }  = attributes;
-    const [ error, setError ]                                               = useState( { invalidUrl: '' } );
+    const {
+        embedUrl,
+        useCustomPreviewImage,
+        customPreviewImage,
+        ytThumb,
+        thumbOpacity,
+        thumbFit,
+        frameWidth,
+        frameHeight
+    }  = attributes;
+
+    let wrapperStyle = {
+        maxWidth: frameWidth ? frameWidth + 'px' : '640px',
+        height: frameHeight ? frameHeight + 'px' : '360px'
+    };
+
+    const [ error, setError ]           = useState( { invalidUrl: '', invalidOpacity: '', invalidHeight: '', invalidWidth: '' } );
+    const [ thumbStyle, setThumbStyle ] = useState( { opacity: thumbOpacity, objectFit: thumbFit || 'cover', ...wrapperStyle } );
 
     const blockProps = useBlockProps( {
         className: `ytvl-wrapper ${isSelected ? 'selected' : ''}`,
@@ -28,6 +44,43 @@ export default function Edit({ attributes, setAttributes, isSelected }) {
         }
 
         setAttributes( { embedUrl: value } );
+    };
+
+    const handleWidthChange = value => {
+        let width = parseFloat( value );
+
+        if( width < 0 ) {
+            setError( { ...error, invalidWidth: __( 'Please enter non-negative value', 'youtube-video-loader' ) } );
+        } else {
+            setError( { ...error, invalidWidth: '' } );
+        }
+
+        setAttributes( { frameWidth: width } );
+    };
+
+    const handleHeightChange = value  => {
+        let height = parseFloat( value );
+
+        if( height < 0 ) {
+            setError( { ...error, invalidHeight: __( 'Please enter non-negative value', 'youtube-video-loader' ) } );
+        } else {
+            setError( { ...error, invalidHeight: '' } );
+        }
+
+        setAttributes( { frameHeight: height } );
+    };
+
+    const handleOpacityChange = value => {
+        let opacity = parseFloat( value );
+
+        if( opacity > 1 || opacity < 0 ) {
+            setError( { ...error, invalidOpacity: __( 'Opacity value should be between "1" and "0"', 'youtube-video-loader' ) } );
+        } else {
+            setError( { ...error, invalidOpacity: '' } );
+        }
+
+        setAttributes( { thumbOpacity: opacity } );
+        setThumbStyle( { ...thumbStyle, opacity } );
     };
 
     const MediaComponent = ({ image }) => {
@@ -58,23 +111,23 @@ export default function Edit({ attributes, setAttributes, isSelected }) {
     const ThumbInfo = () => {
         if( ytThumb && !useCustomPreviewImage ) {
             return (
-                <img className='ytvl-thumb-img' src={ ytThumb } alt={ __( 'Video Preview Thumbnail', 'youtube-video-loader' ) } />
+                <img className='ytvl-thumb-img' style={ thumbStyle } src={ ytThumb } alt={ __( 'Video Preview Thumbnail', 'youtube-video-loader' ) } />
             );
         }
 
         if( useCustomPreviewImage && customPreviewImage?.length ) {
-            return <img className='ytvl-thumb-img' src={ customPreviewImage[1] } alt={ customPreviewImage[2] } />;
+            return <img className='ytvl-thumb-img' style={ thumbStyle } src={ customPreviewImage[1] } alt={ customPreviewImage[2] } />;
         }
 
-        return previewImg;
+        return previewImg( thumbStyle );
     };
 
     const Data = () => {
         return (
             <div { ...blockProps }>
-                { isSelected && <span className='ytvl-info'>Enter YouTube video information via settings.</span> }
+                { isSelected && <span className='ytvl-info'>{ __( 'Enter YouTube video link and thumbnain information via settings.', 'youtube-video-loader' ) }</span> }
 
-                <div className='ytvl-editor-preview-wrapper'>
+                <div className='ytvl-editor-preview-wrapper' style={ wrapperStyle }>
                     <ThumbInfo />
                     <span className='loader-icon'>{ ytIcon }</span>
                 </div>
@@ -94,7 +147,7 @@ export default function Edit({ attributes, setAttributes, isSelected }) {
                         onChange={ ( value ) => handleUrlInputChange( value ) }
                     />
 
-                    {error?.invalidUrl && <p className='ytvl-error'>{error?.invalidUrl}</p>}
+                    { error?.invalidUrl && <p className='ytvl-error'>{ error?.invalidUrl }</p> }
 
                     <ToggleControl
                         checked={ !! useCustomPreviewImage }
@@ -110,6 +163,52 @@ export default function Edit({ attributes, setAttributes, isSelected }) {
                     ) }
 
                     { useCustomPreviewImage && <MediaComponent image={ customPreviewImage } />}
+
+                    <TextControl
+                        __nextHasNoMarginBottom
+                        __next40pxDefaultSize
+                        label={ __( 'Thumbnail Opacity', 'youtube-video-loader' ) }
+                        value={ thumbOpacity ? thumbOpacity : null }
+                        onChange={ ( value ) => handleOpacityChange( value ) }
+                    />
+
+                    { error?.invalidOpacity && <p className='ytvl-error'>{ error?.invalidOpacity }</p> }
+
+                    <SelectControl
+                        label={ __( 'Thumbnail Object Fit Control', 'youtube-video-loader' ) }
+                        value={ thumbFit || 'cover' }
+                        onChange={ ( fit ) => {
+                            setAttributes( { thumbFit: fit } );
+                            setThumbStyle( { ...thumbStyle, objectFit: fit } );
+                        } }
+                        options={ [
+                            { value: 'cover', label: __( 'Cover', 'youtube-video-loader' ) },
+                            { value: 'contain', label: __( 'Contain', 'youtube-video-loader' ) },
+                        ] }
+                        __next40pxDefaultSize
+                        __nextHasNoMarginBottom
+                    />
+
+                    <TextControl
+                        __nextHasNoMarginBottom
+                        __next40pxDefaultSize
+                        label={ __( 'Container Max Width', 'youtube-video-loader' ) }
+                        value={ frameWidth || '640' }
+                        onChange={ ( value ) => handleWidthChange( value ) }
+                    />
+
+                    { error?.invalidWidth && <p className='ytvl-error'>{ error?.invalidWidth } </p>}
+
+                    <TextControl
+                        __nextHasNoMarginBottom
+                        __next40pxDefaultSize
+                        label={ __( 'Container Height', 'youtube-video-loader' ) }
+                        value={ frameHeight || '360' }
+                        onChange={ ( value ) => handleHeightChange( value ) }
+                    />
+
+                    { error?.invalidHeight && <p className='ytvl-error'>{ error?.invalidHeight } </p>}
+
                 </PanelBody>
             </InspectorControls>
 

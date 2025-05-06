@@ -1,12 +1,10 @@
 document.addEventListener( 'click', function( e ) {
     const placeholder = e.target.closest( '.ytvl-editor-preview-wrapper' );
 
-    if (!placeholder) return;
+    if( !placeholder ) return;
   
     const container = placeholder.closest( '.ytvl-wrapper-fe' );
     const videoID   = container.dataset.ytId;
-  
-    console.log( 'vid id: ', videoID );
 
     placeholder.innerHTML = `
         <div class="ytvl-loading-overlay">

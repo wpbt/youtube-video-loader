@@ -22,6 +22,18 @@
         },
         "ytThumb": {
             "type": "string"
+        },
+        "thumbOpacity": {
+            "type": "integer"
+        },
+        "thumbFit": {
+            "type": "string"
+        },
+        "frameWidth": {
+            "type": "integer"
+        },
+        "frameHeight": {
+            "type": "integer"
         }
     },
     "textdomain": "youtube-video-loader",
