@@ -10,8 +10,7 @@ export default function Save({ attributes }) {
         ytThumb,
         thumbOpacity,
         thumbFit,
-        frameWidth,
-        frameHeight
+        frameWidth
     } = attributes;
 
     let videoId = getVideoID( embedUrl );
@@ -19,13 +18,11 @@ export default function Save({ attributes }) {
     let style = { 
         opacity: thumbOpacity,
         objectFit: thumbFit || 'cover',
-        maxWidth: frameWidth ? frameWidth + 'px' : '640px',
-        height: frameHeight ? frameHeight + 'px' : '360px'
+        maxWidth: frameWidth ? frameWidth + 'px' : '100%'
     };
 
     let wrapperStyle = {
-        maxWidth: frameWidth ? frameWidth + 'px' : '640px',
-        height: frameHeight ? frameHeight + 'px' : '360px'
+        maxWidth: frameWidth ? frameWidth + 'px' : ''
     };
 
     const blockProps = useBlockProps.save({
@@ -57,7 +54,7 @@ export default function Save({ attributes }) {
                 { !embedUrl ? <VideoUrlMissing /> : (
                     <div className='ytvl-editor-preview-wrapper' style={wrapperStyle}>
                         <ThumbInfo />
-                        <span className='loader-icon'>{ytIcon}</span>
+                        <div className="ytvl-button-overlay"><span className='loader-icon'>{ytIcon}</span></div>
                     </div>
                 )}
             </div>

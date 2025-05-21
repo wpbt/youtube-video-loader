@@ -31,9 +31,6 @@
         },
         "frameWidth": {
             "type": "integer"
-        },
-        "frameHeight": {
-            "type": "integer"
         }
     },
     "textdomain": "youtube-video-loader",

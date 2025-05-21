@@ -13,16 +13,14 @@ export default function Edit({ attributes, setAttributes, isSelected }) {
         ytThumb,
         thumbOpacity,
         thumbFit,
-        frameWidth,
-        frameHeight
+        frameWidth
     }  = attributes;
 
     let wrapperStyle = {
-        maxWidth: frameWidth ? frameWidth + 'px' : '640px',
-        height: frameHeight ? frameHeight + 'px' : '360px'
+        maxWidth: frameWidth ? frameWidth + 'px' : ''
     };
 
-    const [ error, setError ]           = useState( { invalidUrl: '', invalidOpacity: '', invalidHeight: '', invalidWidth: '' } );
+    const [ error, setError ]           = useState( { invalidUrl: '', invalidOpacity: '', invalidWidth: '' } );
     const [ thumbStyle, setThumbStyle ] = useState( { opacity: thumbOpacity, objectFit: thumbFit || 'cover', ...wrapperStyle } );
 
     const blockProps = useBlockProps( {
@@ -56,18 +54,6 @@ export default function Edit({ attributes, setAttributes, isSelected }) {
         }
 
         setAttributes( { frameWidth: width } );
-    };
-
-    const handleHeightChange = value  => {
-        let height = parseFloat( value );
-
-        if( height < 0 ) {
-            setError( { ...error, invalidHeight: __( 'Please enter non-negative value', 'youtube-video-loader' ) } );
-        } else {
-            setError( { ...error, invalidHeight: '' } );
-        }
-
-        setAttributes( { frameHeight: height } );
     };
 
     const handleOpacityChange = value => {
@@ -129,7 +115,7 @@ export default function Edit({ attributes, setAttributes, isSelected }) {
 
                 <div className='ytvl-editor-preview-wrapper' style={ wrapperStyle }>
                     <ThumbInfo />
-                    <span className='loader-icon'>{ ytIcon }</span>
+                    <div className="ytvl-button-overlay"><span className='loader-icon'>{ ytIcon }</span></div>
                 </div>
             </div>
         );
@@ -193,21 +179,11 @@ export default function Edit({ attributes, setAttributes, isSelected }) {
                         __nextHasNoMarginBottom
                         __next40pxDefaultSize
                         label={ __( 'Container Max Width', 'youtube-video-loader' ) }
-                        value={ frameWidth || '640' }
+                        value={ frameWidth || '' }
                         onChange={ ( value ) => handleWidthChange( value ) }
                     />
 
                     { error?.invalidWidth && <p className='ytvl-error'>{ error?.invalidWidth } </p>}
-
-                    <TextControl
-                        __nextHasNoMarginBottom
-                        __next40pxDefaultSize
-                        label={ __( 'Container Height', 'youtube-video-loader' ) }
-                        value={ frameHeight || '360' }
-                        onChange={ ( value ) => handleHeightChange( value ) }
-                    />
-
-                    { error?.invalidHeight && <p className='ytvl-error'>{ error?.invalidHeight } </p>}
 
                 </PanelBody>
             </InspectorControls>
