@@ -6,8 +6,8 @@
  * Version:             1.0.0
  * Requires at least:   6.8
  * Requires PHP:        8.2
- * Author:              Convey Digital
- * Author URI:          https://conveydigital.com
+ * Author:              Bharat Thapa
+ * Author URI:          https://bharatt.com.np
  * License:             GPL V3
  * License URI:         https://www.gnu.org/licenses/gpl-3.0.html
  * 
