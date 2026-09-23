@@ -31,8 +31,7 @@ define( 'YTVL_PLUGIN_BASENAME', plugin_basename( YTVL_PLUGIN_FILE ) );
 define( 'YTVL_PLUGIN_PATH', dirname( YTVL_PLUGIN_FILE ) . '/' );
 define( 'YTVL_PLUGIN_URL', plugins_url( '/', YTVL_PLUGIN_FILE ) );
 
-add_action( 'init', 'ytvl_register_block' );
+require_once YTVL_PLUGIN_PATH . 'includes/class-plugin.php';
+require_once YTVL_PLUGIN_PATH . 'includes/class-blocks.php';
 
-function ytvl_register_block() {
-    register_block_type( YTVL_PLUGIN_PATH . '/ytvl-block/build' );
-}
+add_action( 'plugins_loaded', array( '\YoutubeVideoLoader\Plugin', 'boot' ) );
