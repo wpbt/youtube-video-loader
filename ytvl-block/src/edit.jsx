@@ -52,8 +52,9 @@ export default function Edit({ attributes, setAttributes, isSelected }) {
     const handleWidthChange = value => {
         let width = parseFloat( value );
 
-        if( width < 0 ) {
+        if( isNaN( width ) || width < 0 ) {
             setError( { ...error, invalidWidth: __( 'Please enter non-negative value', 'youtube-video-loader' ) } );
+            width = 0;
         } else {
             setError( { ...error, invalidWidth: '' } );
         }
@@ -64,8 +65,9 @@ export default function Edit({ attributes, setAttributes, isSelected }) {
     const handleOpacityChange = value => {
         let opacity = parseFloat( value );
 
-        if( opacity > 1 || opacity < 0 ) {
+        if( isNaN( opacity ) || opacity > 1 || opacity < 0 ) {
             setError( { ...error, invalidOpacity: __( 'Opacity value should be between "1" and "0"', 'youtube-video-loader' ) } );
+            opacity = Math.min( Math.max( isNaN( opacity ) ? 1 : opacity, 0 ), 1 );
         } else {
             setError( { ...error, invalidOpacity: '' } );
         }
