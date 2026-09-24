@@ -9,6 +9,10 @@
             "email": "admin@bharatt.com.np"
         }
     ],
+    "scripts": {
+        "lint": "phpcs",
+        "lint:fix": "phpcbf"
+    },
     "minimum-stability": "stable",
     "require-dev": {
         "squizlabs/php_codesniffer": "^3.9",
