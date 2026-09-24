@@ -15,6 +15,7 @@
 	<exclude-pattern>/node_modules/*</exclude-pattern>
 	<exclude-pattern>/ytvl-block/build/*</exclude-pattern>
 	<exclude-pattern>/ytvl-block/node_modules/*</exclude-pattern>
+	<exclude-pattern>*/index.php</exclude-pattern>
 
 	<!-- WordPress Coding Standards. -->
 	<rule ref="WordPress-Extra"/>
