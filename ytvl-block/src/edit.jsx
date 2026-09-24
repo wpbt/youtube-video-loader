@@ -16,12 +16,17 @@ export default function Edit({ attributes, setAttributes, isSelected }) {
         frameWidth
     }  = attributes;
 
-    let wrapperStyle = {
+    const wrapperStyle = {
         maxWidth: frameWidth ? frameWidth + 'px' : ''
     };
 
-    const [ error, setError ]           = useState( { invalidUrl: '', invalidOpacity: '', invalidWidth: '' } );
-    const [ thumbStyle, setThumbStyle ] = useState( { opacity: thumbOpacity, objectFit: thumbFit || 'cover', ...wrapperStyle } );
+    const [ error, setError ] = useState( { invalidUrl: '', invalidOpacity: '', invalidWidth: '' } );
+
+    const thumbStyle = {
+        opacity: thumbOpacity,
+        objectFit: thumbFit || 'cover',
+        ...wrapperStyle,
+    };
 
     const blockProps = useBlockProps( {
         className: `ytvl-wrapper ${isSelected ? 'selected' : ''}`,
@@ -66,7 +71,6 @@ export default function Edit({ attributes, setAttributes, isSelected }) {
         }
 
         setAttributes( { thumbOpacity: opacity } );
-        setThumbStyle( { ...thumbStyle, opacity } );
     };
 
     const MediaComponent = ({ image }) => {
@@ -141,7 +145,7 @@ export default function Edit({ attributes, setAttributes, isSelected }) {
                         onChange={ () => setAttributes( { useCustomPreviewImage: ! useCustomPreviewImage, } ) }
                     />
 
-                    { ( ytThumb && !useCustomPreviewImage ) && ( 
+                    { ( ytThumb && !useCustomPreviewImage ) && (
                         <>
                             <img className='ytvl-thumb-img' src={ ytThumb } alt={ __( 'Video Preview Thumbnail', 'youtube-video-loader' ) } />
                             <span className='ytvl-thumb-img-info'>{ __( 'Default thumbnail for the video url.', 'youtube-video-loader' ) }</span>
@@ -165,7 +169,6 @@ export default function Edit({ attributes, setAttributes, isSelected }) {
                         value={ thumbFit || 'cover' }
                         onChange={ ( fit ) => {
                             setAttributes( { thumbFit: fit } );
-                            setThumbStyle( { ...thumbStyle, objectFit: fit } );
                         } }
                         options={ [
                             { value: 'cover', label: __( 'Cover', 'youtube-video-loader' ) },
