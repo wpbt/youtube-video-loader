@@ -15,7 +15,7 @@ export default function Save({ attributes }) {
 
     let videoId = getVideoID( embedUrl );
 
-    let style = { 
+    let style = {
         opacity: thumbOpacity,
         objectFit: thumbFit || 'cover',
         maxWidth: frameWidth ? frameWidth + 'px' : '100%'
@@ -33,11 +33,11 @@ export default function Save({ attributes }) {
     const VideoUrlMissing = () => {
         return <p>{ __( 'Video URL not set', 'youtube-video-loader' ) }</p>
     };
-    
+
     const ThumbInfo = () => {
         if( ytThumb && !useCustomPreviewImage ) {
             return (
-                <img className='ytvl-thumb-img' style={ style } src={ ytThumb } alt={ __( 'Video Preview Thumbnail', 'youtube-video-loaderk' ) } />
+                <img className='ytvl-thumb-img' style={ style } src={ ytThumb } alt={ __( 'Video Preview Thumbnail', 'youtube-video-loader' ) } />
             );
         }
 
