@@ -1,8 +1,4 @@
-document.addEventListener( 'click', function( e ) {
-    const placeholder = e.target.closest( '.ytvl-editor-preview-wrapper' );
-
-    if( !placeholder ) return;
-  
+function loadVideo( placeholder ) {
     const container = placeholder.closest( '.ytvl-wrapper-fe' );
     const videoID   = container.dataset.ytId;
 
@@ -10,7 +6,7 @@ document.addEventListener( 'click', function( e ) {
         <div class="ytvl-loading-overlay">
             <div class="ytvl-spinner"></div>
         </div>
-        <iframe 
+        <iframe
             loading="lazy"
             src="https://www.youtube-nocookie.com/embed/${videoID}?autoplay=1&mute=1&rel=0&modestbranding=1"
             frameborder="0"
@@ -19,8 +15,24 @@ document.addEventListener( 'click', function( e ) {
             style="width: 100%; height: 100%"
         ></iframe>
         `;
-  
+
     placeholder.querySelector( 'iframe' ).addEventListener( 'load', () => {
         placeholder.querySelector( '.ytvl-loading-overlay' )?.remove();
     });
+}
+
+document.addEventListener( 'click', function( e ) {
+    const placeholder = e.target.closest( '.ytvl-editor-preview-wrapper' );
+    if( !placeholder ) return;
+    loadVideo( placeholder );
+});
+
+document.addEventListener( 'keydown', function( e ) {
+    if( e.key !== 'Enter' && e.key !== ' ' ) return;
+
+    const placeholder = e.target.closest( '.ytvl-editor-preview-wrapper' );
+    if( !placeholder ) return;
+
+    e.preventDefault();
+    loadVideo( placeholder );
 });

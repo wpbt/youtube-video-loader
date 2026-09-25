@@ -52,7 +52,13 @@ export default function Save({ attributes }) {
         return (
             <div { ...blockProps }>
                 { ( !embedUrl || !videoId ) ? <VideoUrlMissing /> : (
-                    <div className='ytvl-editor-preview-wrapper' style={wrapperStyle}>
+                    <div
+						className='ytvl-editor-preview-wrapper'
+						style={wrapperStyle}
+						tabIndex="0"
+						role="button"
+						aria-label={ __( 'Play video', 'youtube-video-loader' ) }
+					>
                         <ThumbInfo />
                         <div className="ytvl-button-overlay"><span className='loader-icon'>{ytIcon}</span></div>
                     </div>
