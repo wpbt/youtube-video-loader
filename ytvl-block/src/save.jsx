@@ -22,7 +22,7 @@ export default function Save({ attributes }) {
     };
 
     let wrapperStyle = {
-        maxWidth: frameWidth ? frameWidth + 'px' : ''
+        maxWidth: frameWidth ? frameWidth + 'px' : undefined
     };
 
     const blockProps = useBlockProps.save({

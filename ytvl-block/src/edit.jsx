@@ -17,7 +17,7 @@ export default function Edit({ attributes, setAttributes, isSelected }) {
     }  = attributes;
 
     const wrapperStyle = {
-        maxWidth: frameWidth ? frameWidth + 'px' : ''
+        maxWidth: frameWidth ? frameWidth + 'px' : undefined
     };
 
     const [ error, setError ] = useState( { invalidUrl: '', invalidOpacity: '', invalidWidth: '' } );
