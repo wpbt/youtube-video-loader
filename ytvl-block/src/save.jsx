@@ -17,7 +17,7 @@ export default function Save({ attributes }) {
 
     let style = {
         opacity: thumbOpacity,
-        objectFit: thumbFit || 'cover',
+        objectFit: thumbFit,
         maxWidth: frameWidth ? frameWidth + 'px' : '100%'
     };
 
@@ -53,12 +53,12 @@ export default function Save({ attributes }) {
             <div { ...blockProps }>
                 { ( !embedUrl || !videoId ) ? <VideoUrlMissing /> : (
                     <div
-						className='ytvl-editor-preview-wrapper'
-						style={wrapperStyle}
-						tabIndex="0"
-						role="button"
-						aria-label={ __( 'Play video', 'youtube-video-loader' ) }
-					>
+                        className='ytvl-editor-preview-wrapper'
+                        style={ wrapperStyle }
+                        role="button"
+                        tabIndex="0"
+                        aria-label={ __( 'Play video', 'youtube-video-loader' ) }
+                    >
                         <ThumbInfo />
                         <div className="ytvl-button-overlay"><span className='loader-icon'>{ytIcon}</span></div>
                     </div>

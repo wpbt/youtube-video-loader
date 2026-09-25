@@ -24,7 +24,7 @@ export default function Edit({ attributes, setAttributes, isSelected }) {
 
     const thumbStyle = {
         opacity: thumbOpacity,
-        objectFit: thumbFit || 'cover',
+        objectFit: thumbFit,
         ...wrapperStyle,
     };
 
@@ -160,7 +160,7 @@ export default function Edit({ attributes, setAttributes, isSelected }) {
                         __nextHasNoMarginBottom
                         __next40pxDefaultSize
                         label={ __( 'Thumbnail Opacity', 'youtube-video-loader' ) }
-                        value={ thumbOpacity ? thumbOpacity : null }
+                        value={ thumbOpacity }
                         onChange={ ( value ) => handleOpacityChange( value ) }
                     />
 
@@ -168,7 +168,7 @@ export default function Edit({ attributes, setAttributes, isSelected }) {
 
                     <SelectControl
                         label={ __( 'Thumbnail Object Fit Control', 'youtube-video-loader' ) }
-                        value={ thumbFit || 'cover' }
+                        value={ thumbFit }
                         onChange={ ( fit ) => {
                             setAttributes( { thumbFit: fit } );
                         } }

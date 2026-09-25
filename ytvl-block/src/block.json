@@ -12,25 +12,32 @@
     },
     "attributes": {
         "embedUrl": {
-            "type": "string"
+            "type": "string",
+            "default": ""
         },
         "useCustomPreviewImage": {
-            "type": "boolean"
+            "type": "boolean",
+            "default": false
         },
         "customPreviewImage": {
-            "type": "array"
+            "type": "array",
+            "default": []
         },
         "ytThumb": {
-            "type": "string"
+            "type": "string",
+            "default": ""
         },
         "thumbOpacity": {
-            "type": "number"
+            "type": "number",
+            "default": 1
         },
         "thumbFit": {
-            "type": "string"
+            "type": "string",
+            "default": "cover"
         },
         "frameWidth": {
-            "type": "integer"
+            "type": "integer",
+            "default": 0
         }
     },
     "textdomain": "youtube-video-loader",
