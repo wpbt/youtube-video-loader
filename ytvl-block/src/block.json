@@ -24,7 +24,7 @@
             "type": "string"
         },
         "thumbOpacity": {
-            "type": "integer"
+            "type": "number"
         },
         "thumbFit": {
             "type": "string"
