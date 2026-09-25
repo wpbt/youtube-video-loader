@@ -51,7 +51,7 @@ export default function Save({ attributes }) {
     const Data = () => {
         return (
             <div { ...blockProps }>
-                { !embedUrl ? <VideoUrlMissing /> : (
+                { ( !embedUrl || !videoId ) ? <VideoUrlMissing /> : (
                     <div className='ytvl-editor-preview-wrapper' style={wrapperStyle}>
                         <ThumbInfo />
                         <div className="ytvl-button-overlay"><span className='loader-icon'>{ytIcon}</span></div>
