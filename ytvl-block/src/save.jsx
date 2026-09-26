@@ -10,7 +10,8 @@ export default function Save({ attributes }) {
         ytThumb,
         thumbOpacity,
         thumbFit,
-        frameWidth
+        frameWidth,
+		aspectRatio
     } = attributes;
 
     let videoId = getVideoID( embedUrl );
@@ -22,7 +23,8 @@ export default function Save({ attributes }) {
     };
 
     let wrapperStyle = {
-        maxWidth: frameWidth ? frameWidth + 'px' : undefined
+        maxWidth: frameWidth ? frameWidth + 'px' : undefined,
+		aspectRatio
     };
 
     const blockProps = useBlockProps.save({

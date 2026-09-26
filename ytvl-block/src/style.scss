@@ -14,8 +14,6 @@
         align-items: center;
         cursor: pointer;
         width: 100%;
-        padding-bottom: 56.25%;
-        height: 0;
         overflow: hidden;
 
         iframe {
@@ -72,7 +70,7 @@
         place-items: center;
         z-index: 2;
     }
-    
+
     .ytvl-spinner {
         width: 40px;
         height: 40px;
@@ -81,7 +79,7 @@
         border-radius: 50%;
         animation: ytvl-spinner 1s linear infinite;
     }
-    
+
     @keyframes ytvl-spinner {
         to { transform: rotate(360deg); }
     }

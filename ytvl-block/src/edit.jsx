@@ -13,14 +13,17 @@ export default function Edit({ attributes, setAttributes, isSelected }) {
         ytThumb,
         thumbOpacity,
         thumbFit,
-        frameWidth
+        frameWidth,
+		aspectRatio
     }  = attributes;
 
     const wrapperStyle = {
-        maxWidth: frameWidth ? frameWidth + 'px' : undefined
+        maxWidth: frameWidth ? frameWidth + 'px' : undefined,
+		aspectRatio
     };
 
     const [ error, setError ] = useState( { invalidUrl: '', invalidOpacity: '', invalidWidth: '' } );
+	const [ opacityInput, setOpacityInput ] = useState( String( thumbOpacity ) );
 
     const thumbStyle = {
         opacity: thumbOpacity,
@@ -63,17 +66,32 @@ export default function Edit({ attributes, setAttributes, isSelected }) {
     };
 
     const handleOpacityChange = value => {
+		setOpacityInput( value );
+
         let opacity = parseFloat( value );
 
         if( isNaN( opacity ) || opacity > 1 || opacity < 0 ) {
-            setError( { ...error, invalidOpacity: __( 'Opacity value should be between "1" and "0"', 'youtube-video-loader' ) } );
-            opacity = Math.min( Math.max( isNaN( opacity ) ? 1 : opacity, 0 ), 1 );
-        } else {
-            setError( { ...error, invalidOpacity: '' } );
-        }
+			setError( { ...error, invalidOpacity: __( 'Opacity value should be between "1" and "0"', 'youtube-video-loader' ) } );
+			return;
+		}
 
-        setAttributes( { thumbOpacity: opacity } );
+		setError( { ...error, invalidOpacity: '' } );
+		setAttributes( { thumbOpacity: opacity } );
     };
+
+	const handleOpacityBlur = () => {
+		let opacity = parseFloat( opacityInput );
+
+		if( isNaN( opacity ) ) {
+			opacity = thumbOpacity;
+		} else {
+			opacity = Math.min( Math.max( opacity, 0 ), 1 );
+		}
+
+		setOpacityInput( String( opacity ) );
+		setError( { ...error, invalidOpacity: '' } );
+		setAttributes( { thumbOpacity: opacity } );
+	};
 
     const MediaComponent = ({ image }) => {
         return (
@@ -160,8 +178,9 @@ export default function Edit({ attributes, setAttributes, isSelected }) {
                         __nextHasNoMarginBottom
                         __next40pxDefaultSize
                         label={ __( 'Thumbnail Opacity', 'youtube-video-loader' ) }
-                        value={ thumbOpacity }
+                        value={ opacityInput }
                         onChange={ ( value ) => handleOpacityChange( value ) }
+						onBlur={ handleOpacityBlur }
                     />
 
                     { error?.invalidOpacity && <p className='ytvl-error'>{ error?.invalidOpacity }</p> }
@@ -179,6 +198,22 @@ export default function Edit({ attributes, setAttributes, isSelected }) {
                         __next40pxDefaultSize
                         __nextHasNoMarginBottom
                     />
+
+					<SelectControl
+						label={ __( 'Aspect Ratio', 'youtube-video-loader' ) }
+						value={ aspectRatio }
+						onChange={ ( ratio ) => {
+							setAttributes( { aspectRatio: ratio } );
+						} }
+						options={ [
+							{ value: '16/9', label: __( '16:9 (Standard widescreen)', 'youtube-video-loader' ) },
+							{ value: '4/3', label: __( '4:3 (Classic)', 'youtube-video-loader' ) },
+							{ value: '1/1', label: __( '1:1 (Square)', 'youtube-video-loader' ) },
+							{ value: '9/16', label: __( '9:16 (Vertical / Shorts)', 'youtube-video-loader' ) },
+						] }
+						__next40pxDefaultSize
+						__nextHasNoMarginBottom
+					/>
 
                     <TextControl
                         __nextHasNoMarginBottom

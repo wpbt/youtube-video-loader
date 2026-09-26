@@ -38,6 +38,10 @@
         "frameWidth": {
             "type": "integer",
             "default": 0
+        },
+        "aspectRatio": {
+            "type": "string",
+            "default": "16/9"
         }
     },
     "textdomain": "youtube-video-loader",
