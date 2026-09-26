@@ -117,7 +117,7 @@ export default function Edit({ attributes, setAttributes, isSelected }) {
     const Data = () => {
         return (
             <div { ...blockProps }>
-                { isSelected && <span className='ytvl-info'>{ __( 'Enter YouTube video link and thumbnain information via settings.', 'youtube-video-loader' ) }</span> }
+                { isSelected && <span className='ytvl-info'>{ __( 'Enter YouTube video link and thumbnail information via settings.', 'youtube-video-loader' ) }</span> }
 
                 <div className='ytvl-editor-preview-wrapper' style={ wrapperStyle }>
                     <ThumbInfo />
