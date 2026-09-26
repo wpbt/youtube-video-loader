@@ -13,7 +13,9 @@ export default function Save({ attributes }) {
         frameWidth,
 		aspectRatio,
 		lazyLoadThumbnail,
-		thumbnailAltText
+		thumbnailAltText,
+		muteOnAutoplay,
+		captionText
     } = attributes;
 
     let videoId = getVideoID( embedUrl );
@@ -32,7 +34,8 @@ export default function Save({ attributes }) {
 
     const blockProps = useBlockProps.save({
         className: "ytvl-wrapper-fe",
-        'data-yt-id': videoId || ''
+        'data-yt-id': videoId || '',
+		'data-mute': muteOnAutoplay ? '1' : '0'
     });
 
     const VideoUrlMissing = () => {
@@ -68,6 +71,7 @@ export default function Save({ attributes }) {
                         <div className="ytvl-button-overlay"><span className='loader-icon'>{ytIcon}</span></div>
                     </div>
                 )}
+				{ captionText && <p className='ytvl-caption'>{ captionText }</p> }
             </div>
         );
     };

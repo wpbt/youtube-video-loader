@@ -1,6 +1,7 @@
 function loadVideo( placeholder ) {
     const container = placeholder.closest( '.ytvl-wrapper-fe' );
     const videoID   = container.dataset.ytId;
+	const mute      = container.dataset.mute === '0' ? '0' : '1';
 
     placeholder.innerHTML = `
         <div class="ytvl-loading-overlay">
@@ -8,7 +9,7 @@ function loadVideo( placeholder ) {
         </div>
         <iframe
             loading="lazy"
-            src="https://www.youtube-nocookie.com/embed/${videoID}?autoplay=1&mute=1&rel=0&modestbranding=1"
+            src="https://www.youtube-nocookie.com/embed/${videoID}?autoplay=1&mute=${mute}&rel=0&modestbranding=1"
             frameborder="0"
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowfullscreen

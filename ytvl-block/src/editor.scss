@@ -7,6 +7,8 @@
 }
 
 .ytvl-wrapper {
+    overflow: hidden;
+
     input {
         display: block;
         padding: 10px;
@@ -93,4 +95,11 @@
     margin-bottom: 10px;
     color: red;
     font-weight: 600;
+}
+
+.ytvl-caption {
+    margin-top: 8px;
+    font-size: 13px;
+    text-align: center;
+    color: #555;
 }

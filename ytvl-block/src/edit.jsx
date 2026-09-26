@@ -17,7 +17,9 @@ export default function Edit({ attributes, setAttributes, isSelected }) {
 		aspectRatio,
 		thumbnailQuality,
 	    lazyLoadThumbnail,
-		thumbnailAltText
+		thumbnailAltText,
+		muteOnAutoplay,
+		captionText
     }  = attributes;
 
 	const defaultThumbAlt = thumbnailAltText || __( 'Video Preview Thumbnail', 'youtube-video-loader' );
@@ -162,6 +164,8 @@ export default function Edit({ attributes, setAttributes, isSelected }) {
                     <ThumbInfo />
                     <div className="ytvl-button-overlay"><span className='loader-icon'>{ ytIcon }</span></div>
                 </div>
+
+				{ captionText && <p className='ytvl-caption'>{ captionText }</p> }
             </div>
         );
     };
@@ -285,7 +289,27 @@ export default function Edit({ attributes, setAttributes, isSelected }) {
 						{ __( 'Turn this off if this block sits above the fold (e.g. a hero section) — lazy loading it there can delay the image and hurt page load performance.', 'youtube-video-loader' ) }
 					</p>
 
+					<ToggleControl
+						checked={ !! muteOnAutoplay }
+						label={ __( 'Mute video on autoplay', 'youtube-video-loader' ) }
+						onChange={ () => setAttributes( { muteOnAutoplay: ! muteOnAutoplay } ) }
+					/>
+
+					<p className='ytvl-thumb-img-info'>
+						{ __( 'Since the video only autoplays after a visitor clicks, browsers allow autoplay with sound here — turn this off if you want it to play unmuted.', 'youtube-video-loader' ) }
+					</p>
+
+					<TextControl
+						__nextHasNoMarginBottom
+						__next40pxDefaultSize
+						label={ __( 'Caption', 'youtube-video-loader' ) }
+						help={ __( 'Optional text shown below the video.', 'youtube-video-loader' ) }
+						value={ captionText }
+						onChange={ ( value ) => setAttributes( { captionText: value } ) }
+					/>
+
                 </PanelBody>
+
             </InspectorControls>
 
             <Data />

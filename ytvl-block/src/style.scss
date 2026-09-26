@@ -1,4 +1,6 @@
 .ytvl-wrapper-fe {
+    overflow: hidden;
+
     .ytvl-preview-img-icon {
         opacity: 0.1;
         width: 100%;
@@ -83,4 +85,11 @@
     @keyframes ytvl-spinner {
         to { transform: rotate(360deg); }
     }
+}
+
+.ytvl-caption {
+    margin-top: 8px;
+    font-size: 13px;
+    text-align: center;
+    color: #555;
 }

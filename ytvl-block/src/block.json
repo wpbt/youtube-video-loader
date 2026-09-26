@@ -8,7 +8,11 @@
     "category": "media",
     "keywords": [ "yt", "youtube video loader" ],
     "supports": {
-        "html": false
+        "html": false,
+        "align": [ "wide", "full" ],
+        "border": {
+            "radius": true
+        }
     },
     "attributes": {
         "embedUrl": {
@@ -52,6 +56,14 @@
             "default": true
         },
         "thumbnailAltText": {
+            "type": "string",
+            "default": ""
+        },
+        "muteOnAutoplay": {
+            "type": "boolean",
+            "default": true
+        },
+        "captionText": {
             "type": "string",
             "default": ""
         }
