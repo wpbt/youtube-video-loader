@@ -42,6 +42,14 @@
         "aspectRatio": {
             "type": "string",
             "default": "16/9"
+        },
+        "thumbnailQuality": {
+            "type": "string",
+            "default": "hqdefault"
+        },
+        "lazyLoadThumbnail": {
+            "type": "boolean",
+            "default": true
         }
     },
     "textdomain": "youtube-video-loader",

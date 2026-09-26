@@ -14,7 +14,9 @@ export default function Edit({ attributes, setAttributes, isSelected }) {
         thumbOpacity,
         thumbFit,
         frameWidth,
-		aspectRatio
+		aspectRatio,
+		thumbnailQuality,
+	    lazyLoadThumbnail
     }  = attributes;
 
     const wrapperStyle = {
@@ -22,7 +24,7 @@ export default function Edit({ attributes, setAttributes, isSelected }) {
 		aspectRatio
     };
 
-    const [ error, setError ] = useState( { invalidUrl: '', invalidOpacity: '', invalidWidth: '' } );
+    const [ error, setError ] = useState( { invalidUrl: '', invalidOpacity: '', invalidWidth: '', invalidThumbQuality: '' } );
 	const [ opacityInput, setOpacityInput ] = useState( String( thumbOpacity ) );
 
     const thumbStyle = {
@@ -39,7 +41,7 @@ export default function Edit({ attributes, setAttributes, isSelected }) {
         let id = getVideoID( value );
 
         if( id ) {
-            let thumb = getYouTubeThumbnail( id );
+			let thumb = getYouTubeThumbnail( id, thumbnailQuality );
 
             if( thumb ) {
                 setAttributes( { ytThumb: thumb } );
@@ -51,6 +53,22 @@ export default function Edit({ attributes, setAttributes, isSelected }) {
 
         setAttributes( { embedUrl: value } );
     };
+
+	const handleQualityChange = quality => {
+		let id = getVideoID( embedUrl );
+	    let thumb = getYouTubeThumbnail( id, quality );
+
+	    setError( { ...error, invalidThumbQuality: '' } );
+	    setAttributes( { thumbnailQuality: quality, ytThumb: thumb } );
+	};
+
+	const handleThumbError = () => {
+		setError( { ...error, invalidThumbQuality: __( 'This quality isn\'t available for this video. Pick a different one.', 'youtube-video-loader' ) } );
+	};
+
+	const handleThumbLoad = () => {
+	    setError( { ...error, invalidThumbQuality: '' } );
+	};
 
     const handleWidthChange = value => {
         let width = parseFloat( value );
@@ -121,7 +139,7 @@ export default function Edit({ attributes, setAttributes, isSelected }) {
     const ThumbInfo = () => {
         if( ytThumb && !useCustomPreviewImage ) {
             return (
-                <img className='ytvl-thumb-img' style={ thumbStyle } src={ ytThumb } alt={ __( 'Video Preview Thumbnail', 'youtube-video-loader' ) } />
+				<img className='ytvl-thumb-img' style={ thumbStyle } src={ ytThumb } alt={ __( 'Video Preview Thumbnail', 'youtube-video-loader' ) } onError={ handleThumbError } onLoad={ handleThumbLoad } />
             );
         }
 
@@ -167,12 +185,32 @@ export default function Edit({ attributes, setAttributes, isSelected }) {
 
                     { ( ytThumb && !useCustomPreviewImage ) && (
                         <>
-                            <img className='ytvl-thumb-img' src={ ytThumb } alt={ __( 'Video Preview Thumbnail', 'youtube-video-loader' ) } />
+                            <img className='ytvl-thumb-img' src={ ytThumb } alt={ __( 'Video Preview Thumbnail', 'youtube-video-loader' ) } onError={ handleThumbError } onLoad={ handleThumbLoad } />
                             <span className='ytvl-thumb-img-info'>{ __( 'Default thumbnail for the video url.', 'youtube-video-loader' ) }</span>
                         </>
                     ) }
 
                     { useCustomPreviewImage && <MediaComponent image={ customPreviewImage } />}
+
+					{ !useCustomPreviewImage && (
+						<>
+							<SelectControl
+								label={ __( 'Thumbnail Quality', 'youtube-video-loader' ) }
+								value={ thumbnailQuality }
+								onChange={ ( quality ) => handleQualityChange( quality ) }
+								options={ [
+									{ value: 'mqdefault', label: __( 'Medium', 'youtube-video-loader' ) },
+									{ value: 'hqdefault', label: __( 'High (default)', 'youtube-video-loader' ) },
+									{ value: 'sddefault', label: __( 'Standard', 'youtube-video-loader' ) },
+									{ value: 'maxresdefault', label: __( 'Max Resolution — not available for every video', 'youtube-video-loader' ) },
+								] }
+								__next40pxDefaultSize
+								__nextHasNoMarginBottom
+							/>
+
+							{ error?.invalidThumbQuality && <p className='ytvl-error'>{ error?.invalidThumbQuality }</p> }
+						</>
+					) }
 
                     <TextControl
                         __nextHasNoMarginBottom
@@ -224,6 +262,16 @@ export default function Edit({ attributes, setAttributes, isSelected }) {
                     />
 
                     { error?.invalidWidth && <p className='ytvl-error'>{ error?.invalidWidth } </p>}
+
+					<ToggleControl
+						checked={ !! lazyLoadThumbnail }
+						label={ __( 'Lazy load thumbnail', 'youtube-video-loader' ) }
+						onChange={ () => setAttributes( { lazyLoadThumbnail: ! lazyLoadThumbnail } ) }
+					/>
+
+					<p className='ytvl-thumb-img-info'>
+						{ __( 'Turn this off if this block sits above the fold (e.g. a hero section) — lazy loading it there can delay the image and hurt page load performance.', 'youtube-video-loader' ) }
+					</p>
 
                 </PanelBody>
             </InspectorControls>
