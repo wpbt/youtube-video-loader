@@ -41,7 +41,8 @@
         }
     },
     "textdomain": "youtube-video-loader",
-    "style": "file:./index.css",
+    "viewStyle": "file:./style-index.css",
+    "editorStyle": "file:./index.css",
     "editorScript": "file:./index.js",
     "viewScript": "file:./ytvl-script.js"
 }
