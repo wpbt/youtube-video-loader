@@ -16,8 +16,11 @@ export default function Edit({ attributes, setAttributes, isSelected }) {
         frameWidth,
 		aspectRatio,
 		thumbnailQuality,
-	    lazyLoadThumbnail
+	    lazyLoadThumbnail,
+		thumbnailAltText
     }  = attributes;
+
+	const defaultThumbAlt = thumbnailAltText || __( 'Video Preview Thumbnail', 'youtube-video-loader' );
 
     const wrapperStyle = {
         maxWidth: frameWidth ? frameWidth + 'px' : undefined,
@@ -139,7 +142,7 @@ export default function Edit({ attributes, setAttributes, isSelected }) {
     const ThumbInfo = () => {
         if( ytThumb && !useCustomPreviewImage ) {
             return (
-				<img className='ytvl-thumb-img' style={ thumbStyle } src={ ytThumb } alt={ __( 'Video Preview Thumbnail', 'youtube-video-loader' ) } onError={ handleThumbError } onLoad={ handleThumbLoad } />
+				<img className='ytvl-thumb-img' style={ thumbStyle } src={ ytThumb } alt={ defaultThumbAlt } onError={ handleThumbError } onLoad={ handleThumbLoad } />
             );
         }
 
@@ -185,7 +188,7 @@ export default function Edit({ attributes, setAttributes, isSelected }) {
 
                     { ( ytThumb && !useCustomPreviewImage ) && (
                         <>
-                            <img className='ytvl-thumb-img' src={ ytThumb } alt={ __( 'Video Preview Thumbnail', 'youtube-video-loader' ) } onError={ handleThumbError } onLoad={ handleThumbLoad } />
+                            <img className='ytvl-thumb-img' src={ ytThumb } alt={ defaultThumbAlt } onError={ handleThumbError } onLoad={ handleThumbLoad } />
                             <span className='ytvl-thumb-img-info'>{ __( 'Default thumbnail for the video url.', 'youtube-video-loader' ) }</span>
                         </>
                     ) }
@@ -211,6 +214,15 @@ export default function Edit({ attributes, setAttributes, isSelected }) {
 							{ error?.invalidThumbQuality && <p className='ytvl-error'>{ error?.invalidThumbQuality }</p> }
 						</>
 					) }
+
+					<TextControl
+					    __nextHasNoMarginBottom
+					    __next40pxDefaultSize
+					    label={ __( 'Thumbnail Alt Text', 'youtube-video-loader' ) }
+					    help={ __( 'Describes the thumbnail for screen readers. Leave blank to use the default text.', 'youtube-video-loader' ) }
+					    value={ thumbnailAltText }
+					    onChange={ ( value ) => setAttributes( { thumbnailAltText: value } ) }
+					/>
 
                     <TextControl
                         __nextHasNoMarginBottom

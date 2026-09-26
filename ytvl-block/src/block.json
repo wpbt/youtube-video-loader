@@ -50,6 +50,10 @@
         "lazyLoadThumbnail": {
             "type": "boolean",
             "default": true
+        },
+        "thumbnailAltText": {
+            "type": "string",
+            "default": ""
         }
     },
     "textdomain": "youtube-video-loader",

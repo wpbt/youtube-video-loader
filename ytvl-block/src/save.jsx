@@ -12,10 +12,12 @@ export default function Save({ attributes }) {
         thumbFit,
         frameWidth,
 		aspectRatio,
-		lazyLoadThumbnail
+		lazyLoadThumbnail,
+		thumbnailAltText
     } = attributes;
 
     let videoId = getVideoID( embedUrl );
+	let defaultThumbAlt = thumbnailAltText || __( 'Video Preview Thumbnail', 'youtube-video-loader' );
 
     let style = {
         opacity: thumbOpacity,
@@ -40,7 +42,7 @@ export default function Save({ attributes }) {
     const ThumbInfo = () => {
         if( ytThumb && !useCustomPreviewImage ) {
             return (
-                <img className='ytvl-thumb-img' style={ style } src={ ytThumb } alt={ __( 'Video Preview Thumbnail', 'youtube-video-loader' ) } loading={ lazyLoadThumbnail ? 'lazy' : 'eager' } />
+                <img className='ytvl-thumb-img' style={ style } src={ ytThumb } alt={ defaultThumbAlt } loading={ lazyLoadThumbnail ? 'lazy' : 'eager' } />
             );
         }
 
