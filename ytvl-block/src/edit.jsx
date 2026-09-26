@@ -175,11 +175,12 @@ export default function Edit({ attributes, setAttributes, isSelected }) {
             <InspectorControls>
                 <PanelBody title={ __( 'Settings', 'youtube-video-loader' ) }>
                     <TextControl
-                        __nextHasNoMarginBottom
                         __next40pxDefaultSize
                         label={ __( 'Video URL', 'youtube-video-loader' ) }
                         value={ embedUrl || '' }
                         onChange={ ( value ) => handleUrlInputChange( value ) }
+						placeholder='https://youtube.com/watch?v=video_ID'
+						help={ __( 'Enter YouTube video url', 'youtube-video-loader' ) }
                     />
 
                     { error?.invalidUrl && <p className='ytvl-error'>{ error?.invalidUrl }</p> }
@@ -211,8 +212,6 @@ export default function Edit({ attributes, setAttributes, isSelected }) {
 									{ value: 'sddefault', label: __( 'Standard', 'youtube-video-loader' ) },
 									{ value: 'maxresdefault', label: __( 'Max Resolution — not available for every video', 'youtube-video-loader' ) },
 								] }
-								__next40pxDefaultSize
-								__nextHasNoMarginBottom
 							/>
 
 							{ error?.invalidThumbQuality && <p className='ytvl-error'>{ error?.invalidThumbQuality }</p> }
@@ -220,7 +219,6 @@ export default function Edit({ attributes, setAttributes, isSelected }) {
 					) }
 
 					<TextControl
-					    __nextHasNoMarginBottom
 					    __next40pxDefaultSize
 					    label={ __( 'Thumbnail Alt Text', 'youtube-video-loader' ) }
 					    help={ __( 'Describes the thumbnail for screen readers. Leave blank to use the default text.', 'youtube-video-loader' ) }
@@ -229,7 +227,6 @@ export default function Edit({ attributes, setAttributes, isSelected }) {
 					/>
 
                     <TextControl
-                        __nextHasNoMarginBottom
                         __next40pxDefaultSize
                         label={ __( 'Thumbnail Opacity', 'youtube-video-loader' ) }
                         value={ opacityInput }
@@ -249,8 +246,6 @@ export default function Edit({ attributes, setAttributes, isSelected }) {
                             { value: 'cover', label: __( 'Cover', 'youtube-video-loader' ) },
                             { value: 'contain', label: __( 'Contain', 'youtube-video-loader' ) },
                         ] }
-                        __next40pxDefaultSize
-                        __nextHasNoMarginBottom
                     />
 
 					<SelectControl
@@ -265,16 +260,14 @@ export default function Edit({ attributes, setAttributes, isSelected }) {
 							{ value: '1/1', label: __( '1:1 (Square)', 'youtube-video-loader' ) },
 							{ value: '9/16', label: __( '9:16 (Vertical / Shorts)', 'youtube-video-loader' ) },
 						] }
-						__next40pxDefaultSize
-						__nextHasNoMarginBottom
 					/>
 
                     <TextControl
-                        __nextHasNoMarginBottom
                         __next40pxDefaultSize
                         label={ __( 'Container Max Width', 'youtube-video-loader' ) }
                         value={ frameWidth || '' }
                         onChange={ ( value ) => handleWidthChange( value ) }
+						help={ __( 'Max width value is in (px)', 'youtube-video-loader' ) }
                     />
 
                     { error?.invalidWidth && <p className='ytvl-error'>{ error?.invalidWidth } </p>}
@@ -283,24 +276,17 @@ export default function Edit({ attributes, setAttributes, isSelected }) {
 						checked={ !! lazyLoadThumbnail }
 						label={ __( 'Lazy load thumbnail', 'youtube-video-loader' ) }
 						onChange={ () => setAttributes( { lazyLoadThumbnail: ! lazyLoadThumbnail } ) }
+						help={ __( 'Turn this off if this block sits above the fold (e.g. a hero section) — lazy loading it there can delay the image and hurt page load performance.', 'youtube-video-loader' ) }
 					/>
-
-					<p className='ytvl-thumb-img-info'>
-						{ __( 'Turn this off if this block sits above the fold (e.g. a hero section) — lazy loading it there can delay the image and hurt page load performance.', 'youtube-video-loader' ) }
-					</p>
 
 					<ToggleControl
 						checked={ !! muteOnAutoplay }
 						label={ __( 'Mute video on autoplay', 'youtube-video-loader' ) }
 						onChange={ () => setAttributes( { muteOnAutoplay: ! muteOnAutoplay } ) }
+						help={ __( 'Since the video only autoplays after a visitor clicks, browsers allow autoplay with sound here — turn this off if you want it to play unmuted.', 'youtube-video-loader' ) }
 					/>
 
-					<p className='ytvl-thumb-img-info'>
-						{ __( 'Since the video only autoplays after a visitor clicks, browsers allow autoplay with sound here — turn this off if you want it to play unmuted.', 'youtube-video-loader' ) }
-					</p>
-
 					<TextControl
-						__nextHasNoMarginBottom
 						__next40pxDefaultSize
 						label={ __( 'Caption', 'youtube-video-loader' ) }
 						help={ __( 'Optional text shown below the video.', 'youtube-video-loader' ) }
