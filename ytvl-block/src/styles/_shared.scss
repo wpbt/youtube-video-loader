@@ -1,0 +1,52 @@
+@use 'variables' as *;
+@use 'mixins';
+
+// Building blocks shared by editor.scss and style.scss.
+//
+// The editor and the frontend scope these components under different
+// parents (.ytvl-wrapper vs .ytvl-wrapper-fe), so the scoped pieces are
+// mixins that each entry file includes under its own selector. Emitting
+// them from here would ship the other context's selectors in each bundle.
+
+// Unscoped and identical in both contexts, so @use emits it as-is.
+.ytvl-caption {
+    margin-top: $space-sm;
+    font-size: 13px;
+    text-align: center;
+    color: $color-text-muted;
+}
+
+// Thumbnail + play-button preview area. Contexts add their own extras
+// (e.g. the frontend's cursor and iframe) next to the include.
+@mixin preview-wrapper {
+    margin-top: $space-md;
+    background: black;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    overflow: hidden;
+
+    .ytvl-thumb-img {
+        @include mixins.absolute-fill;
+    }
+
+    .ytvl-button-overlay {
+        @include mixins.absolute-fill;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+}
+
+// Play icon centered over the thumbnail.
+@mixin loader-icon {
+    position: absolute;
+    display: flex;
+
+    svg {
+        fill: $color-error;
+        max-width: 70px;
+    }
+}

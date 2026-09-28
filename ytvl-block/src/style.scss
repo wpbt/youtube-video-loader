@@ -1,3 +1,7 @@
+@use 'styles/variables' as *;
+@use 'styles/mixins';
+@use 'styles/shared';
+
 .ytvl-wrapper-fe {
     overflow: hidden;
 
@@ -8,53 +12,21 @@
     }
 
     .ytvl-editor-preview-wrapper {
-        margin-top: 12px;
-        background: black;
-        position: relative;
-        display: flex;
-        justify-content: center;
-        align-items: center;
+        // Declarations go before the include: Sass warns about
+        // declarations that follow nested rules.
         cursor: pointer;
-        width: 100%;
-        overflow: hidden;
+        @include shared.preview-wrapper;
 
         iframe {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
+            @include mixins.absolute-fill;
             border: 0;
-        }
-
-        .ytvl-thumb-img {
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            top: 0;
-            left: 0;
-        }
-
-        .ytvl-button-overlay {
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            top: 0;
-            left: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
         }
     }
 
     .loader-icon {
-        position: absolute;
-        display: flex;
+        @include shared.loader-icon;
 
         svg {
-            fill: red;
-            max-width: 70px;
-
             @media (max-width: 500px) {
                 max-width: 50px;
             }
@@ -62,15 +34,11 @@
     }
 
     .ytvl-loading-overlay {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
+        @include mixins.absolute-fill;
         background: rgba(0, 0, 0, 0.9);
         display: grid;
         place-items: center;
-        z-index: 2;
+        z-index: $z-loading-overlay;
     }
 
     .ytvl-spinner {
@@ -80,16 +48,19 @@
         border-top-color: #fff;
         border-radius: 50%;
         animation: ytvl-spinner 1s linear infinite;
+
+        // Visitors who ask their OS for reduced motion get a slow fade
+        // instead of a constant spin. It still signals "loading".
+        @media (prefers-reduced-motion: reduce) {
+            animation: ytvl-pulse 2s ease-in-out infinite;
+        }
     }
 
     @keyframes ytvl-spinner {
         to { transform: rotate(360deg); }
     }
-}
 
-.ytvl-caption {
-    margin-top: 8px;
-    font-size: 13px;
-    text-align: center;
-    color: #555;
+    @keyframes ytvl-pulse {
+        50% { opacity: 0.4; }
+    }
 }

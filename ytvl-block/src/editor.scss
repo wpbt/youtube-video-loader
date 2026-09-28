@@ -1,9 +1,12 @@
+@use 'styles/variables' as *;
+@use 'styles/shared';
+
 .ytvl-icon {
-    color: #f0b849;
+    color: $color-accent;
 }
 
 .ytvl-icon:hover {
-    color: black;
+    color: $color-icon-hover;
 }
 
 .ytvl-wrapper {
@@ -12,13 +15,13 @@
     input {
         display: block;
         padding: 10px;
-        margin-bottom: 12px;
+        margin-bottom: $space-md;
     }
 
     .ytvl-info {
         font-style: italic;
         font-size: 16px;
-        margin-bottom: 12px;
+        margin-bottom: $space-md;
     }
 
     .ytvl-preview-img-icon {
@@ -26,66 +29,34 @@
     }
 
     .ytvl-editor-preview-wrapper {
-        margin-top: 12px;
-        background: black;
-        position: relative;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 100%;
-        overflow: hidden;
-
-        .ytvl-thumb-img {
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            top: 0;
-            left: 0;
-        }
-
-        .ytvl-button-overlay {
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            top: 0;
-            left: 0;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+        @include shared.preview-wrapper;
     }
 
     .loader-icon {
-        position: absolute;
-        display: flex;
-
-        svg {
-            fill: red;
-            max-width: 70px;
-        }
+        @include shared.loader-icon;
     }
 }
 
 .ytvl-wrapper.selected {
     padding: 10px;
-    border: 1px solid #f0b849;
-    border-radius: 8px;
-    background-color: #fef8ee;
+    border: 1px solid $color-accent;
+    border-radius: $radius-sm;
+    background-color: $color-accent-bg;
 }
 
 .block-editor-block-inspector .ytvl-thumb-img,
 .ytvl-prev-image-wrapper img {
     width: 180px;
-    border-radius: 12px;
+    border-radius: $radius-md;
 }
 
 .ytvl-thumb-img-info {
     font-style: italic;
     font-size: 12px;
-    margin-left: 4px;
-    margin-top: 12px;
+    margin-left: $space-xs;
+    margin-top: $space-md;
     display: block;
-    margin-bottom: 12px;
+    margin-bottom: $space-md;
 }
 
 .ytvl-error {
@@ -93,13 +64,6 @@
     font-style: italic;
     font-size: 12px;
     margin-bottom: 10px;
-    color: red;
+    color: $color-error;
     font-weight: 600;
-}
-
-.ytvl-caption {
-    margin-top: 8px;
-    font-size: 13px;
-    text-align: center;
-    color: #555;
 }
