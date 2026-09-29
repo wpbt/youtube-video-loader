@@ -155,6 +155,7 @@ export default function Edit({ attributes, setAttributes, isSelected }) {
                         allowedTypes={ [ 'image' ] }
                         multiple={ false }
                         labels={ { title: __( 'Insert Preview Image', 'youtube-video-loader' ) } }
+						className='ytvl-media-component'
                     />
                 ) : (
                     <div className="ytvl-prev-image-wrapper">
@@ -274,7 +275,7 @@ export default function Edit({ attributes, setAttributes, isSelected }) {
 						</>
 					) }
 
-					{ ! consentEnabled && (
+					{ ( !consentEnabled && !useCustomPreviewImage ) && (
 						<TextControl
 						    __next40pxDefaultSize
 						    label={ __( 'Thumbnail Alt Text', 'youtube-video-loader' ) }

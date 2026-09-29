@@ -65,6 +65,10 @@
     font-weight: 600;
 }
 
+.components-placeholder.ytvl-media-component {
+    margin-bottom: 1em;
+}
+
 // Give the font size options their own full-width row instead of sharing
 // one with the Reset button. These are WordPress's internal class names,
 // so re-check them if a future update changes the picker's markup.
