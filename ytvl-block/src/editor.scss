@@ -26,6 +26,7 @@
 
     .ytvl-editor-preview-wrapper {
         @include shared.preview-wrapper;
+        @include shared.consent-mode;
     }
 
     .loader-icon {
@@ -62,4 +63,17 @@
     margin-bottom: 10px;
     color: $color-error;
     font-weight: 600;
+}
+
+// Give the font size options their own full-width row instead of sharing
+// one with the Reset button. These are WordPress's internal class names,
+// so re-check them if a future update changes the picker's markup.
+.ytvl-font-size-control {
+    .components-font-size-picker__controls {
+        flex-wrap: wrap;
+    }
+
+    .components-font-size-picker__toggle-group-control {
+        flex: 1 1 100%;
+    }
 }

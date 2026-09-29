@@ -66,6 +66,38 @@
         "captionText": {
             "type": "string",
             "default": ""
+        },
+        "consentEnabled": {
+            "type": "boolean",
+            "default": false
+        },
+        "consentText": {
+            "type": "string",
+            "default": ""
+        },
+        "consentButtonLabel": {
+            "type": "string",
+            "default": ""
+        },
+        "consentTextColor": {
+            "type": "string",
+            "default": ""
+        },
+        "consentBackgroundColor": {
+            "type": "string",
+            "default": ""
+        },
+        "consentButtonBackground": {
+            "type": "string",
+            "default": ""
+        },
+        "consentButtonTextColor": {
+            "type": "string",
+            "default": ""
+        },
+        "consentFontSize": {
+            "type": "string",
+            "default": ""
         }
     },
     "textdomain": "youtube-video-loader",

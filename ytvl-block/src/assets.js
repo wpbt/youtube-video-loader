@@ -16,10 +16,10 @@ const ytIcon = (
 
 export function getVideoID( url ) {
     if( !url ) return null;
-  
+
     const regExp    = /^.*(youtu.be\/|v\/|u\/\w\/|embed\/|watch\?v=|&v=)([^#&?]*).*/;
     const match     = url.match(regExp);
-    
+
     return ( match && match[2].length === 11 ) ? match[2] : null;
 }
 
@@ -27,6 +27,28 @@ export function getYouTubeThumbnail( videoId, quality = 'hqdefault' ) {
     if( !videoId ) return '';
 
     return `https://img.youtube.com/vi/${videoId}/${quality}.jpg`;
+}
+
+// CSS custom properties for the consent notice. Only values an admin has set
+// are included, so an unstyled notice gets no inline style at all.
+export function getConsentStyle( attributes ) {
+    const map = {
+        consentTextColor: '--ytvl-consent-color',
+        consentBackgroundColor: '--ytvl-consent-bg',
+        consentButtonTextColor: '--ytvl-consent-button-color',
+        consentButtonBackground: '--ytvl-consent-button-bg',
+        consentFontSize: '--ytvl-consent-font-size',
+    };
+
+    const style = {};
+
+    for( const [ attribute, property ] of Object.entries( map ) ) {
+        if( attributes[ attribute ] ) {
+            style[ property ] = attributes[ attribute ];
+        }
+    }
+
+    return Object.keys( style ).length ? style : undefined;
 }
 
 export { previewImg, ytIcon };

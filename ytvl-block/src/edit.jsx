@@ -1,8 +1,8 @@
 import { __ } from '@wordpress/i18n';
-import { InspectorControls, MediaPlaceholder, useBlockProps } from '@wordpress/block-editor';
+import { InspectorControls, MediaPlaceholder, RichText, PanelColorSettings, ContrastChecker, FontSizePicker, useBlockProps } from '@wordpress/block-editor';
 import { PanelBody, TextControl, ToggleControl, Button, SelectControl } from '@wordpress/components';
 import { useState } from '@wordpress/element';
-import { ytIcon, previewImg, getVideoID, getYouTubeThumbnail } from './assets';
+import { ytIcon, previewImg, getVideoID, getYouTubeThumbnail, getConsentStyle } from './assets';
 
 
 export default function Edit({ attributes, setAttributes, isSelected }) {
@@ -19,15 +19,30 @@ export default function Edit({ attributes, setAttributes, isSelected }) {
 	    lazyLoadThumbnail,
 		thumbnailAltText,
 		muteOnAutoplay,
-		captionText
+		captionText,
+		consentEnabled,
+		consentText,
+		consentButtonLabel,
+		consentTextColor,
+		consentBackgroundColor,
+		consentButtonBackground,
+		consentButtonTextColor,
+		consentFontSize
     }  = attributes;
 
 	const defaultThumbAlt = thumbnailAltText || __( 'Video Preview Thumbnail', 'youtube-video-loader' );
+
+	const defaultConsentText = __( 'This video is provided by YouTube. If you continue, your browser will connect to YouTube\'s servers, which may set cookies and collect data about your visit. Load the video?', 'youtube-video-loader' );
+	const defaultConsentButtonLabel = __( 'Yes, load video', 'youtube-video-loader' );
 
     const wrapperStyle = {
         maxWidth: frameWidth ? frameWidth + 'px' : undefined,
 		aspectRatio
     };
+
+	// Opacity, object fit and lazy loading only apply to an image on screen.
+	// With the notice on, that's a custom image and nothing else.
+	const showImageSettings = ! consentEnabled || ( useCustomPreviewImage && customPreviewImage?.length );
 
     const [ error, setError ] = useState( { invalidUrl: '', invalidOpacity: '', invalidWidth: '', invalidThumbQuality: '' } );
 	const [ opacityInput, setOpacityInput ] = useState( String( thumbOpacity ) );
@@ -116,6 +131,21 @@ export default function Edit({ attributes, setAttributes, isSelected }) {
 		setAttributes( { thumbOpacity: opacity } );
 	};
 
+	const handleConsentToggle = enabled => {
+		const updates = { consentEnabled: enabled };
+
+		// Seed the translatable defaults the first time the notice is turned on.
+		if( enabled && ! consentText ) {
+			updates.consentText = defaultConsentText;
+		}
+
+		if( enabled && ! consentButtonLabel ) {
+			updates.consentButtonLabel = defaultConsentButtonLabel;
+		}
+
+		setAttributes( updates );
+	};
+
     const MediaComponent = ({ image }) => {
         return (
             <>
@@ -155,15 +185,41 @@ export default function Edit({ attributes, setAttributes, isSelected }) {
         return previewImg( thumbStyle );
     };
 
+    // Called as a plain function (see the return below), not rendered as
+    // <Data />. As a component defined inside Edit it would be re-created on
+    // every render, and the RichText in the consent notice would lose focus
+    // after each keystroke.
     const Data = () => {
         return (
             <div { ...blockProps }>
                 { isSelected && <span className='ytvl-info'>{ __( 'Enter YouTube video link and thumbnail information via settings.', 'youtube-video-loader' ) }</span> }
 
-                <div className='ytvl-editor-preview-wrapper' style={ wrapperStyle }>
-                    <ThumbInfo />
-                    <div className="ytvl-button-overlay"><span className='loader-icon'>{ ytIcon }</span></div>
-                </div>
+				{ consentEnabled ? (
+					<div className='ytvl-editor-preview-wrapper ytvl-consent-mode' style={ wrapperStyle }>
+						{ ( useCustomPreviewImage && customPreviewImage?.length ) ? (
+							<img className='ytvl-thumb-img' style={ thumbStyle } src={ customPreviewImage[1] } alt='' />
+						) : null }
+
+						<div className='ytvl-consent' style={ getConsentStyle( attributes ) }>
+							<RichText
+								tagName='p'
+								className='ytvl-consent-text'
+								value={ consentText }
+								onChange={ ( value ) => setAttributes( { consentText: value } ) }
+								allowedFormats={ [ 'core/bold', 'core/italic', 'core/link' ] }
+								placeholder={ __( 'Write the notice visitors see before the video loads…', 'youtube-video-loader' ) }
+							/>
+							<button type='button' className='ytvl-consent-accept' tabIndex={ -1 }>
+								{ consentButtonLabel || defaultConsentButtonLabel }
+							</button>
+						</div>
+					</div>
+				) : (
+					<div className='ytvl-editor-preview-wrapper' style={ wrapperStyle }>
+						<ThumbInfo />
+						<div className="ytvl-button-overlay"><span className='loader-icon'>{ ytIcon }</span></div>
+					</div>
+				) }
 
 				{ captionText && <p className='ytvl-caption'>{ captionText }</p> }
             </div>
@@ -191,7 +247,7 @@ export default function Edit({ attributes, setAttributes, isSelected }) {
                         onChange={ () => setAttributes( { useCustomPreviewImage: ! useCustomPreviewImage, } ) }
                     />
 
-                    { ( ytThumb && !useCustomPreviewImage ) && (
+                    { ( ytThumb && !useCustomPreviewImage && !consentEnabled ) && (
                         <>
                             <img className='ytvl-thumb-img' src={ ytThumb } alt={ defaultThumbAlt } onError={ handleThumbError } onLoad={ handleThumbLoad } />
                             <span className='ytvl-thumb-img-info'>{ __( 'Default thumbnail for the video url.', 'youtube-video-loader' ) }</span>
@@ -200,7 +256,7 @@ export default function Edit({ attributes, setAttributes, isSelected }) {
 
                     { useCustomPreviewImage && <MediaComponent image={ customPreviewImage } />}
 
-					{ !useCustomPreviewImage && (
+					{ ( !useCustomPreviewImage && !consentEnabled ) && (
 						<>
 							<SelectControl
 								label={ __( 'Thumbnail Quality', 'youtube-video-loader' ) }
@@ -218,35 +274,41 @@ export default function Edit({ attributes, setAttributes, isSelected }) {
 						</>
 					) }
 
-					<TextControl
-					    __next40pxDefaultSize
-					    label={ __( 'Thumbnail Alt Text', 'youtube-video-loader' ) }
-					    help={ __( 'Describes the thumbnail for screen readers. Leave blank to use the default text.', 'youtube-video-loader' ) }
-					    value={ thumbnailAltText }
-					    onChange={ ( value ) => setAttributes( { thumbnailAltText: value } ) }
-					/>
+					{ ! consentEnabled && (
+						<TextControl
+						    __next40pxDefaultSize
+						    label={ __( 'Thumbnail Alt Text', 'youtube-video-loader' ) }
+						    help={ __( 'Describes the thumbnail for screen readers. Leave blank to use the default text.', 'youtube-video-loader' ) }
+						    value={ thumbnailAltText }
+						    onChange={ ( value ) => setAttributes( { thumbnailAltText: value } ) }
+						/>
+					) }
 
-                    <TextControl
-                        __next40pxDefaultSize
-                        label={ __( 'Thumbnail Opacity', 'youtube-video-loader' ) }
-                        value={ opacityInput }
-                        onChange={ ( value ) => handleOpacityChange( value ) }
-						onBlur={ handleOpacityBlur }
-                    />
+                    { showImageSettings && (
+						<>
+							<TextControl
+								__next40pxDefaultSize
+								label={ __( 'Thumbnail Opacity', 'youtube-video-loader' ) }
+								value={ opacityInput }
+								onChange={ ( value ) => handleOpacityChange( value ) }
+								onBlur={ handleOpacityBlur }
+							/>
 
-                    { error?.invalidOpacity && <p className='ytvl-error'>{ error?.invalidOpacity }</p> }
+							{ error?.invalidOpacity && <p className='ytvl-error'>{ error?.invalidOpacity }</p> }
 
-                    <SelectControl
-                        label={ __( 'Thumbnail Object Fit Control', 'youtube-video-loader' ) }
-                        value={ thumbFit }
-                        onChange={ ( fit ) => {
-                            setAttributes( { thumbFit: fit } );
-                        } }
-                        options={ [
-                            { value: 'cover', label: __( 'Cover', 'youtube-video-loader' ) },
-                            { value: 'contain', label: __( 'Contain', 'youtube-video-loader' ) },
-                        ] }
-                    />
+							<SelectControl
+								label={ __( 'Thumbnail Object Fit Control', 'youtube-video-loader' ) }
+								value={ thumbFit }
+								onChange={ ( fit ) => {
+									setAttributes( { thumbFit: fit } );
+								} }
+								options={ [
+									{ value: 'cover', label: __( 'Cover', 'youtube-video-loader' ) },
+									{ value: 'contain', label: __( 'Contain', 'youtube-video-loader' ) },
+								] }
+							/>
+						</>
+					)}
 
 					<SelectControl
 						label={ __( 'Aspect Ratio', 'youtube-video-loader' ) }
@@ -272,12 +334,14 @@ export default function Edit({ attributes, setAttributes, isSelected }) {
 
                     { error?.invalidWidth && <p className='ytvl-error'>{ error?.invalidWidth } </p>}
 
-					<ToggleControl
-						checked={ !! lazyLoadThumbnail }
-						label={ __( 'Lazy load thumbnail', 'youtube-video-loader' ) }
-						onChange={ () => setAttributes( { lazyLoadThumbnail: ! lazyLoadThumbnail } ) }
-						help={ __( 'Turn this off if this block sits above the fold (e.g. a hero section) — lazy loading it there can delay the image and hurt page load performance.', 'youtube-video-loader' ) }
-					/>
+					{ showImageSettings && (
+						<ToggleControl
+							checked={ !! lazyLoadThumbnail }
+							label={ __( 'Lazy load thumbnail', 'youtube-video-loader' ) }
+							onChange={ () => setAttributes( { lazyLoadThumbnail: ! lazyLoadThumbnail } ) }
+							help={ __( 'Turn this off if this block sits above the fold (e.g. a hero section) — lazy loading it there can delay the image and hurt page load performance.', 'youtube-video-loader' ) }
+						/>
+					) }
 
 					<ToggleControl
 						checked={ !! muteOnAutoplay }
@@ -296,9 +360,69 @@ export default function Edit({ attributes, setAttributes, isSelected }) {
 
                 </PanelBody>
 
+				<PanelBody title={ __( 'Consent Notice', 'youtube-video-loader' ) } initialOpen={ !! consentEnabled }>
+					<ToggleControl
+						checked={ !! consentEnabled }
+						label={ __( 'Ask visitors before loading YouTube', 'youtube-video-loader' ) }
+						onChange={ handleConsentToggle }
+						help={ __( 'Shows a notice instead of the thumbnail, and no YouTube thumbnail is loaded. The video only loads after a visitor clicks the button. Edit the notice text directly in the block.', 'youtube-video-loader' ) }
+					/>
+
+					{ consentEnabled && (
+						<TextControl
+							__next40pxDefaultSize
+							label={ __( 'Button Label', 'youtube-video-loader' ) }
+							value={ consentButtonLabel }
+							onChange={ ( value ) => setAttributes( { consentButtonLabel: value } ) }
+						/>
+					) }
+				</PanelBody>
+
+				{ consentEnabled && (
+					<PanelColorSettings
+						title={ __( 'Notice Style', 'youtube-video-loader' ) }
+						initialOpen={ false }
+						colorSettings={ [
+							{
+								value: consentTextColor,
+								onChange: ( color ) => setAttributes( { consentTextColor: color || '' } ),
+								label: __( 'Text', 'youtube-video-loader' ),
+							},
+							{
+								value: consentBackgroundColor,
+								onChange: ( color ) => setAttributes( { consentBackgroundColor: color || '' } ),
+								label: __( 'Background', 'youtube-video-loader' ),
+								enableAlpha: true,
+							},
+							{
+								value: consentButtonTextColor,
+								onChange: ( color ) => setAttributes( { consentButtonTextColor: color || '' } ),
+								label: __( 'Button text', 'youtube-video-loader' ),
+							},
+							{
+								value: consentButtonBackground,
+								onChange: ( color ) => setAttributes( { consentButtonBackground: color || '' } ),
+								label: __( 'Button background', 'youtube-video-loader' ),
+							},
+						] }
+					>
+						<ContrastChecker textColor={ consentTextColor } backgroundColor={ consentBackgroundColor } />
+						<ContrastChecker textColor={ consentButtonTextColor } backgroundColor={ consentButtonBackground } />
+
+						<div className="ytvl-font-size-control">
+							<FontSizePicker
+								__next40pxDefaultSize
+								value={ consentFontSize || undefined }
+								onChange={ ( size ) => setAttributes( { consentFontSize: size || '' } ) }
+								withReset
+							/>
+						</div>
+					</PanelColorSettings>
+				) }
+
             </InspectorControls>
 
-            <Data />
+            { Data() }
         </>
     );
 }

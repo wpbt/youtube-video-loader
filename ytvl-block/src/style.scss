@@ -14,6 +14,7 @@
         // declarations that follow nested rules.
         cursor: pointer;
         @include shared.preview-wrapper;
+        @include shared.consent-mode;
 
         iframe {
             @include mixins.absolute-fill;

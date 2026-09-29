@@ -57,3 +57,85 @@
         max-width: 70px;
     }
 }
+
+// Consent notice shown instead of the thumbnail and play button. Included
+// inside .ytvl-editor-preview-wrapper by both editor.scss and style.scss.
+//
+// Admins can restyle it per block through CSS custom properties (set inline
+// by the block); each falls back to the default look:
+//   --ytvl-consent-color, --ytvl-consent-bg, --ytvl-consent-font-size,
+//   --ytvl-consent-button-bg, --ytvl-consent-button-color
+@mixin consent-mode {
+    &.ytvl-consent-mode {
+        // Not clipping here, so the box can grow past its aspect-ratio
+        // minimum; the container below scrolls if the notice is still taller.
+        overflow: visible;
+        cursor: default;
+
+        // The scrim lives on this container, not on the wrapper, so it goes
+        // away with the notice when the video loads and never covers the iframe.
+        .ytvl-consent {
+            position: relative;
+            flex: 1 1 auto;
+            align-self: stretch;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            justify-content: safe center;
+            overflow: auto;
+            gap: $space-md;
+            padding: $space-lg;
+            box-sizing: border-box;
+            background: var(--ytvl-consent-bg, #{$color-consent-scrim});
+            color: var(--ytvl-consent-color, #{$color-on-dark});
+            // Set here so both the text and the button follow it.
+            font-size: var(--ytvl-consent-font-size, 1em);
+            text-align: center;
+
+            @media (max-width: 500px) {
+                padding: $space-md;
+            }
+
+            .ytvl-consent-text {
+                margin: 0;
+                max-width: $consent-text-max-width;
+                line-height: 1.5;
+                color: inherit;
+
+                a {
+                    color: inherit;
+                    text-decoration: underline;
+
+                    &:hover,
+                    &:focus-visible {
+                        text-decoration-thickness: 2px;
+                    }
+                }
+            }
+
+            .ytvl-consent-accept {
+                padding: $space-sm $space-xl;
+                border: 0;
+                border-radius: $radius-sm;
+                background: var(--ytvl-consent-button-bg, #{$color-consent-button});
+                color: var(--ytvl-consent-button-color, #{$color-on-dark});
+                font: inherit;
+                font-weight: 600;
+                cursor: pointer;
+
+                // Darken whatever color the admin picked, instead of a fixed hover color.
+                &:hover {
+                    filter: brightness(0.9);
+                }
+
+                // Uses the notice text color, which the admin already chose to
+                // contrast with the notice background.
+                &:focus-visible {
+                    outline: 3px solid var(--ytvl-consent-color, #{$color-on-dark});
+                    outline-offset: 2px;
+                }
+            }
+        }
+    }
+}

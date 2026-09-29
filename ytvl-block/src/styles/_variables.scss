@@ -4,6 +4,9 @@ $color-accent-bg: #fef8ee;
 $color-icon-hover: #000;
 $color-error: #d63638;
 $color-text-muted: #555;
+$color-on-dark: #fff;
+$color-consent-scrim: rgba(0, 0, 0, 0.6);
+$color-consent-button: $color-error;
 
 // Border radii
 $radius-sm: 8px;
@@ -13,6 +16,11 @@ $radius-md: 12px;
 $space-xs: 4px;
 $space-sm: 8px;
 $space-md: 12px;
+$space-lg: 16px;
+$space-xl: 24px;
 
 // Stacking
 $z-loading-overlay: 2;
+
+// Sizing
+$consent-text-max-width: 60ch;
