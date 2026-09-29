@@ -56,6 +56,18 @@ Style it to match your brand:
 - For building from source: Node.js 22.14.0+ and npm
 - For development: Composer (used for PHP linting only)
 
+## Download
+
+[**Download the latest release (youtube-video-loader.zip)**](https://github.com/wpbt/youtube-video-loader/releases/latest/download/youtube-video-loader.zip)
+
+The zip is ready to use and needs no build step:
+
+1. In WordPress admin, go to **Plugins → Add New → Upload Plugin**.
+2. Choose the zip and click **Install Now**.
+3. Activate the plugin, then add the **YouTube Video Loader** block from the Media category.
+
+Prefer to build it yourself? See [Installation (from source)](#installation-from-source) below.
+
 ## Installation
 
 Make sure to generate the build before activation.
