@@ -16,7 +16,7 @@
     color: $color-text-muted;
 }
 
-// Thumbnail + play-button preview area. Contexts add their own extras
+// Thumbnail, placeholder icon and play-button preview area. Contexts add their own extras
 // (e.g. the frontend's cursor and iframe) next to the include.
 @mixin preview-wrapper {
     margin-top: $space-md;
@@ -29,6 +29,13 @@
     overflow: hidden;
 
     .ytvl-thumb-img {
+        @include mixins.absolute-fill;
+    }
+
+    // Placeholder icon shown before a thumbnail exists. It fills the box
+    // and the SVG's viewBox centers the icon, so the shape follows the
+    // block's aspect-ratio instead of a fixed pixel height.
+    .ytvl-preview-img-icon {
         @include mixins.absolute-fill;
     }
 
