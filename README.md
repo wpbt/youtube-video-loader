@@ -2,7 +2,7 @@
 
 A WordPress block that inserts YouTube videos efficiently. The frontend shows only a preview thumbnail, and no YouTube scripts load until the visitor clicks.
 
-![YouTube Video Loader block on the frontend](docs/screenshots/block-in-the-frontend.png)
+![YouTube Video Loader block on the frontend](docs/screenshots/video-preview-in-the-frontend.png)
 
 ## Features
 
